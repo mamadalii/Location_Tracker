@@ -1,6 +1,7 @@
 package com.example.polygons;
 
 
+import java.text.BreakIterator;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -41,6 +42,7 @@ import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.maps.android.PolyUtil;
 import java.util.Collections;
 import static com.example.polygons.R.id.map;
+import static com.example.polygons.R.id.text;
 
 
 /**
@@ -62,12 +64,6 @@ public class PolyActivity extends AppCompatActivity
     Button statistics;
 
     TextView textView;
-    Button start;
-    Handler resultHandler;
-    long MillisecondTime, StartTime, TimeBuff, UpdateTime = 0L;
-    Handler handler;
-    int Seconds, Minutes, hours;
-    Place userPlace;
     /**
      * Based on `distanceToLine` method from
      * https://github.com/googlemaps/android-maps-utils/blob/master/library/src/com/google/maps/android/PolyUtil.java
@@ -79,29 +75,38 @@ public class PolyActivity extends AppCompatActivity
     public Runnable TimerRunnable = new Runnable() {
 
         public void run() {
+            if (isUserIn(userLocation)) {
+
+                MillisecondTime = SystemClock.elapsedRealtime() - userPlace.getStartTime();
+
+                userPlace.setmilliSeconds(userPlace.getmilliSeconds() + MillisecondTime);
+                UpdateTime = userPlace.getmilliSeconds();
+                userPlace.setStartTime(SystemClock.elapsedRealtime());
+
+                Seconds = (int) (UpdateTime / 1000);
+
+                Minutes = Seconds / 60;
+
+                hours = Minutes / 60;
+                Minutes = Minutes % 60;
+                Seconds = Seconds % 60;
+
+                Log.v("seconds" + Seconds, "1234");
+                textView.setText("" + String.format("%02d", hours) + ":" + String.format("%02d", Minutes) + ":"
+                        + String.format("%02d", Seconds));
 
 
-            MillisecondTime = SystemClock.elapsedRealtime() - userPlace.getStartTime();
-
-            UpdateTime = TimeBuff + MillisecondTime;
-
-            Seconds = (int) (UpdateTime / 1000);
-
-            Minutes = Seconds / 60;
-
-            hours = Minutes / 60;
-            Minutes = Minutes % 60;
-            Seconds = Seconds % 60;
-
-            Log.v("seconds" + Seconds, "1234");
-            textView.setText("" + String.format("%02d", hours) + ":" + String.format("%02d", Minutes) + ":"
-                    + String.format("%02d", Seconds));
-
-
-            handler.postDelayed(this, 0);
+                handler.postDelayed(this, 0);
+            }
         }
-
     };
+    Button start;
+    Handler resultHandler;
+    long MillisecondTime, StartTime, TimeBuff, UpdateTime = 0L;
+    Handler handler;
+    int Seconds, Minutes, hours;
+    Place userPlace;
+    TextView tvResult;
     boolean changePlaceBoolean = false;
     TextView tvUserPlace;
     TextView tvClosePlace;
@@ -119,18 +124,22 @@ public class PolyActivity extends AppCompatActivity
             if (!start.isEnabled()) {
                 if (placeList.size() > 0) {
 
+
                     if (isUserIn(userLocation)) {
 
-                        textView.setText("True");
+                        tvResult.setText("True");
                         if (changePlaceBoolean == true) {
 
-//                        userPlace.setStartTime(SystemClock.elapsedRealtime());
+                            userPlace.setStartTime(SystemClock.elapsedRealtime());
 
-//                        handler.postDelayed(TimerRunnable, 0);
+                            handler.postDelayed(TimerRunnable, 0);
                         }
 
 
-                    }
+                    } else
+                        handler.removeCallbacks((TimerRunnable));
+                    tvResult.setText("false");
+
                 }
                 checkHandler.postDelayed(this, 1000);
             }
@@ -167,6 +176,7 @@ public class PolyActivity extends AppCompatActivity
         resultHandler = new Handler();
         tvClosePlace = findViewById(R.id.tv_closest_place);
         tvUserPlace = findViewById(R.id.tv_current_place);
+        tvResult = findViewById(R.id.result_text_view);
     }
 
     private void setStartButtonClick() {
@@ -503,14 +513,10 @@ public class PolyActivity extends AppCompatActivity
         Place closestPlace = placeList.get(distancesToPolygons.indexOf(Collections.min(distancesToPolygons)));
 
         tvClosePlace.setText(closestPlace.getName());
-        TextView textView = findViewById(R.id.result_text_view);
 
-//        LatLng l = new LatLng(-38,14);
+
         boolean result = (PolyUtil.containsLocation(l, closestPlace.getplacePointsLatLng(), true));
-//        textView.setText(String.valueOf(result));
-//        optionsLatReserve.clear();
         distancesToPolygons.clear();
-//        tempOptionsLat.clear();
 
         getPlace(closestPlace, result);
 
@@ -549,16 +555,6 @@ public class PolyActivity extends AppCompatActivity
         return Distances;
     }
 
-    void runabble() {
-    }
 
-
-//Runnable resultRunnable = new Runnable() {
-//    @Override
-//    public void run() {
-////        isUserIn(userLocation);
-////        resultHandler.postDelayed(resultRunnable,0);
-//    }
-//};
 }
 

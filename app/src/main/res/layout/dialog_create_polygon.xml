@@ -13,6 +13,7 @@
         android:gravity="center_horizontal"
         android:layout_marginTop="40dp" />
 
+
     <EditText
         android:id="@+id/etPolygonTitle"
         android:layout_width="wrap_content"
@@ -22,8 +23,7 @@
         android:layout_marginTop="86dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:layout_below="@id/text"
-        android:hint="@string/polygon_title_et_hint"/>
+        android:layout_below="@id/text" />
 
     <Button
         android:id="@+id/btnDialogBuild"
