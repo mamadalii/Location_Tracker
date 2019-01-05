@@ -3,6 +3,8 @@ package com.example.polygons;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
@@ -42,6 +44,21 @@ public class Place {
         placePointsLatLng = latLongCurrentArray;
         googleMap.addPolygon(polygonOptions.clickable(true).fillColor(Color.GREEN)).setTag(name);
     }
+
+    protected Place(Parcel in) {
+        milliSeconds = in.readLong();
+        startTime = in.readLong();
+        polygonOptions = in.readParcelable(PolygonOptions.class.getClassLoader());
+        name = in.readString();
+        placePointsLatLng = in.createTypedArrayList(LatLng.CREATOR);
+        if (in.readByte() == 0) {
+            distanceToUserLocation = null;
+        } else {
+            distanceToUserLocation = in.readFloat();
+        }
+    }
+
+
 
     public float distanceBetweenToPoint(Location loc1, Location loc2) {
         float distanceInMeters = loc1.distanceTo(loc2);

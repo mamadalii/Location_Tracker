@@ -2,12 +2,14 @@ package com.example.polygons;
 
 
 import java.text.BreakIterator;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.os.SystemClock;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +17,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -53,6 +56,7 @@ public class PolyActivity extends AppCompatActivity
         implements
         OnMapReadyCallback {
 
+    int situation = 0;
 
     private LocationListener locationListener;
     private Location userLocation;
@@ -96,10 +100,40 @@ public class PolyActivity extends AppCompatActivity
                         + String.format("%02d", Seconds));
 
 
-                handler.postDelayed(this, 0);
+                handler.postDelayed(this, 1000);
             }
         }
     };
+    public Runnable checkRunnable = new Runnable() {
+
+
+        public void run() {
+            if (!start.isEnabled()) {
+                if (placeList.size() > 0) {
+
+
+                    if (isUserIn(userLocation)) {
+
+                        tvResult.setText("True");
+                        if (situation == 0 || situation == 1) {
+
+                            userPlace.setStartTime(SystemClock.elapsedRealtime());
+
+                            handler.postDelayed(TimerRunnable, 2000);
+                        }
+
+
+                    } else
+                        handler.removeCallbacks((TimerRunnable));
+                    tvResult.setText("false");
+
+                }
+                checkHandler.postDelayed(this, 2000);
+            }
+        }
+    };
+    //used for transfering times to statistics
+    ArrayList<Long> milliArray;
     Button start;
     Handler resultHandler;
     long MillisecondTime, StartTime, TimeBuff, UpdateTime = 0L;
@@ -117,34 +151,8 @@ public class PolyActivity extends AppCompatActivity
     private Button btnAlertDialogBuildPolygon;
     private static ArrayList<LatLng> latLongCurrentArray;
     Handler checkHandler;
-    public Runnable checkRunnable = new Runnable() {
-
-
-        public void run() {
-            if (!start.isEnabled()) {
-                if (placeList.size() > 0) {
-
-
-                    if (isUserIn(userLocation)) {
-
-                        tvResult.setText("True");
-                        if (changePlaceBoolean == true) {
-
-                            userPlace.setStartTime(SystemClock.elapsedRealtime());
-
-                            handler.postDelayed(TimerRunnable, 0);
-                        }
-
-
-                    } else
-                        handler.removeCallbacks((TimerRunnable));
-                    tvResult.setText("false");
-
-                }
-                checkHandler.postDelayed(this, 1000);
-            }
-        }
-    };
+    //used for transfering names to statistics
+    ArrayList<String> namesArray;
     private LocationManager locationManager;
 
     private void checkMyLocation() {
@@ -164,7 +172,8 @@ public class PolyActivity extends AppCompatActivity
         textView = findViewById(R.id.tv_timer);
         setupOldPolygons();
 
-
+        milliArray = new ArrayList<>();
+        namesArray = new ArrayList<>();
         handler = new Handler();
         //check if there is no previous polyoptions
         polygonOptionsNullTester();
@@ -312,13 +321,37 @@ public class PolyActivity extends AppCompatActivity
 
     }
 
+    private ArrayList<Long> milliArrayBuilder(List<Place> placeList) {
+        if (milliArray != null)
+            milliArray.clear();
+        ArrayList<Long> result = new ArrayList<>();
+        for (Place p : placeList) {
+            result.add(p.getmilliSeconds());
+        }
+        return result;
+    }
+
+    private ArrayList<String> nameArrayBuilder(List<Place> placeList) {
+        if (namesArray != null)
+            namesArray.clear();
+        ArrayList<String> result = new ArrayList<>();
+        for (Place p : placeList) {
+            result.add(p.getName());
+        }
+        return result;
+    }
     private void setStatisticsButtonClick() {
         statistics = findViewById(R.id.btnstatistics);
         statistics.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                milliArray = milliArrayBuilder(placeList);
+                namesArray = nameArrayBuilder(placeList);
+
+
                 //change the activity to statistics activity
-                Intent intent = new Intent(PolyActivity.this, Stastistics.class);
+                Intent intent = new Intent(PolyActivity.this, Stastistics.class).putExtra("milliArray", milliArray)
+                        .putExtra("namesArray", namesArray);
                 startActivity(intent);
             }
         });
@@ -365,11 +398,12 @@ public class PolyActivity extends AppCompatActivity
 
             @Override
             public void onLocationChanged(Location location) {
-
+                if (m != null)
+                    m.remove();
                 m = googleMap.addMarker(new MarkerOptions()
                         .position(new LatLng(location.getLatitude(), location.getLongitude())).title("You Are Here")
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.icon)));
-
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE)));
+//                .icon(BitmapDescriptorFactory.fromResource(R.drawable.icon)
                 googleMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(), location.getLongitude())));
 
                 userLocation = location;
@@ -471,7 +505,7 @@ public class PolyActivity extends AppCompatActivity
 
                 googleMap.addMarker(new MarkerOptions()
                         .position(new LatLng(location.latitude, location.longitude))
-                        .draggable(true));
+                        .draggable(true).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
 
 
             }
@@ -526,13 +560,24 @@ public class PolyActivity extends AppCompatActivity
 
     private void getPlace(Place closestPlace, boolean result) {
         if (result == false) {
+            if (userPlace != null) {
+                //user has moved from a place to outside
+                situation = 2;
+            }
             userPlace = null;
             changePlaceBoolean = false;
+
             tvUserPlace.setText("Nowhere");
         } else {
             if (closestPlace.equals(userPlace)) {
                 changePlaceBoolean = false;
-            } else
+            } else if (userPlace == null) {
+                //user has moved from outside to a place
+                situation = 1;
+            } else {
+                //user has moved from one place directly to another place
+                situation = 0;
+            }
                 changePlaceBoolean = true;
             userPlace = closestPlace;
             tvUserPlace.setText(userPlace.getName());
