@@ -5,6 +5,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
@@ -14,11 +15,22 @@ import com.google.maps.android.PolyUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Place {
+public class Place implements Parcelable {
     //Each place is a polygon
 
 
     GoogleMap googleMap;
+    public static final Creator<Place> CREATOR = new Creator<Place>() {
+        @Override
+        public Place createFromParcel(Parcel in) {
+            return new Place(in);
+        }
+
+        @Override
+        public Place[] newArray(int size) {
+            return new Place[size];
+        }
+    };
     //Fields
     private long milliSeconds = 0L;
     private long startTime;
@@ -35,15 +47,7 @@ public class Place {
     private Float distanceToUserLocation;
 
     //Methods
-
-    //Consttructors
-    public Place(PolygonOptions polygonOptions, String name, GoogleMap googleMap, List<LatLng> latLongCurrentArray) {
-        this.polygonOptions = polygonOptions;
-        this.name = name;
-        this.googleMap = googleMap;
-        placePointsLatLng = latLongCurrentArray;
-        googleMap.addPolygon(polygonOptions.clickable(true).fillColor(Color.GREEN)).setTag(name);
-    }
+    GoogleMap googleMapReserve;
 
     protected Place(Parcel in) {
         milliSeconds = in.readLong();
@@ -59,6 +63,20 @@ public class Place {
     }
 
 
+    //Consttructors
+    public Place(PolygonOptions polygonOptions, String name, GoogleMap googleMap, List<LatLng> latLongCurrentArray) {
+        Log.v(googleMap + "inside place maker", latLongCurrentArray.size() + "");
+        this.polygonOptions = polygonOptions;
+        this.name = name;
+        if (googleMap != null)
+            this.googleMap = googleMap;
+        else
+            this.googleMap = googleMapReserve;
+
+        placePointsLatLng = latLongCurrentArray;
+
+        googleMap.addPolygon(polygonOptions.clickable(true).fillColor(Color.GREEN)).setTag(name);
+    }
 
     public float distanceBetweenToPoint(Location loc1, Location loc2) {
         float distanceInMeters = loc1.distanceTo(loc2);
@@ -126,6 +144,10 @@ public class Place {
         return milliSeconds;
     }
 
+    public GoogleMap getGoogleMap() {
+        return googleMap;
+    }
+
     public void setmilliSeconds(long milliSeconds) {
         this.milliSeconds = milliSeconds;
     }
@@ -168,4 +190,24 @@ public class Place {
     }
 
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(milliSeconds);
+        dest.writeLong(startTime);
+        dest.writeParcelable(polygonOptions, flags);
+        dest.writeString(name);
+//        dest.writeValue(googleMap);
+        dest.writeTypedList(placePointsLatLng);
+        if (distanceToUserLocation == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeFloat(distanceToUserLocation);
+        }
+    }
 }

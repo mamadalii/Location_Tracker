@@ -1,15 +1,12 @@
 package com.example.polygons;
 
 
-import java.text.BreakIterator;
-import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Parcelable;
 import android.os.SystemClock;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -17,7 +14,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -45,7 +41,6 @@ import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.maps.android.PolyUtil;
 import java.util.Collections;
 import static com.example.polygons.R.id.map;
-import static com.example.polygons.R.id.text;
 
 
 /**
@@ -61,7 +56,7 @@ public class PolyActivity extends AppCompatActivity
     private LocationListener locationListener;
     private Location userLocation;
 
-    static List<Place> placeList = new ArrayList<>();
+    static List<Place> placeList;
 
 
     ArrayList<Marker> markerList = new ArrayList<>();
@@ -154,6 +149,7 @@ public class PolyActivity extends AppCompatActivity
     //used for transfering names to statistics
     ArrayList<String> namesArray;
     private LocationManager locationManager;
+    private static Marker lastMarker;
 
     private void checkMyLocation() {
         checkHandler = new Handler();
@@ -164,17 +160,31 @@ public class PolyActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+
+            ArrayList<Place> placeArray = new ArrayList<Place>();
+
+            placeArray = savedInstanceState.getParcelableArrayList("placeArray");
+            placeList = placeArray;
+            Log.v("inside " + placeList.size(), "onrestore" + placeList.size());
+        }
         setContentView(R.layout.activity_maps);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(map);
         mapFragment.getMapAsync(this);
         textView = findViewById(R.id.tv_timer);
-        setupOldPolygons();
-
+        Log.v("inside ", "oncreate ");
+        if (placeList == null) {
+            placeList = new ArrayList<>();
+        } else
+            Log.v("inside size", "" + placeList.size());
+//        setupOldPolygons(mMap);
         milliArray = new ArrayList<>();
         namesArray = new ArrayList<>();
         handler = new Handler();
+        Log.v("place numbers : " + placeList.size(), "onCreate");
+
         //check if there is no previous polyoptions
         polygonOptionsNullTester();
         //Start Button Click Listener
@@ -214,7 +224,7 @@ public class PolyActivity extends AppCompatActivity
         if (latLongCurrentArray.size() > 2) {
             Place newPlace = new Place(currentPolygonOptions, title, mMap, latLongCurrentArray);
             placeList.add(newPlace);
-            setupOldPolygons();
+            setupOldPolygons(mMap);
         }
 
         //                mMap.addPolygon(options.fillColor(Color.GREEN)).setTag(title);
@@ -225,17 +235,18 @@ public class PolyActivity extends AppCompatActivity
         currentPolygonOptions = null;
     }
 
-    private void setupOldPolygons() {
+    public void setupOldPolygons(GoogleMap mMap) {
 //        if (polygonOptions.size() != 0) {
 //            for (int i=0;i<polygonOptions.size();i++) {
-        if (placeList.size() != 0) {
-            for (Place p : placeList) {
-                Place oldPlace = new Place(p.getPolygonOptions(), p.getName(), mMap, p.getplacePointsLatLng());
+        if (placeList != null) {
+            if (placeList.size() != 0) {
+                for (Place p : placeList) {
+                    Place oldPlace = new Place(p.getPolygonOptions(), p.getName(), mMap, p.getplacePointsLatLng());
 //                mMap.addPolygon(options.fillColor(Color.GREEN)).setTag(title);
 
+                }
             }
         }
-
 
     }
 
@@ -389,8 +400,19 @@ public class PolyActivity extends AppCompatActivity
 
     @Override
     public void onMapReady(GoogleMap gooogleMap) {
+
         final GoogleMap googleMap = gooogleMap;
         mMap = gooogleMap;
+
+        setupOldPolygons(mMap);
+        if (currentPolygonOptions != null) {
+            mMap.addPolygon(currentPolygonOptions);
+        }
+        if (lastMarker != null) {
+            googleMap.addMarker(new MarkerOptions()
+                    .position(lastMarker.getPosition())
+                    .draggable(true).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
+        }
 
         locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
         locationListener = new LocationListener() {
@@ -481,7 +503,7 @@ public class PolyActivity extends AppCompatActivity
                 //biuld the temperory polygon on the map
 
                 mMap.clear();
-                setupOldPolygons();
+                setupOldPolygons(mMap);
 //                if (polygonOptions.size() != 0) {
 //                    for (PolygonOptions options : polygonOptions) {
 //                        mMap.addPolygon(options.fillColor(Color.GREEN)).setTag("title");
@@ -503,7 +525,7 @@ public class PolyActivity extends AppCompatActivity
 //                // Store a data object with the polygon, used here to indicate an arbitrary type.
 ////                polygon1.setTag("alpha");
 
-                googleMap.addMarker(new MarkerOptions()
+                lastMarker = googleMap.addMarker(new MarkerOptions()
                         .position(new LatLng(location.latitude, location.longitude))
                         .draggable(true).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
 
@@ -518,7 +540,7 @@ public class PolyActivity extends AppCompatActivity
         });
 
 
-        setupOldPolygons();
+        setupOldPolygons(mMap);
 
         mMap.setOnPolygonClickListener(new GoogleMap.OnPolygonClickListener() {
             @Override
@@ -529,6 +551,7 @@ public class PolyActivity extends AppCompatActivity
         });
 
     }
+
 
     public boolean isUserIn(Location location) {
         //Convert location to LatLng
@@ -600,6 +623,29 @@ public class PolyActivity extends AppCompatActivity
         return Distances;
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
 
+//        // Save UI state changes to the savedInstanceState.
+        savedInstanceState.putBoolean("MyBoolean", true);
+        ArrayList<Place> placeArray = new ArrayList<Place>(placeList);
+        savedInstanceState.putParcelableArrayList("placeArray", placeArray);
+//        // etc.
+        Log.v("inside " + placeArray.size(), "savedInstance");
+    }
+//    @Override
+//    public void onRestoreInstanceState(Bundle savedInstanceState) {
+//        super.onRestoreInstanceState(savedInstanceState);
+//        // Restore UI state from the savedInstanceState.
+//        // This bundle has also been passed to onCreate.
+//        boolean myBoolean = savedInstanceState.getBoolean("MyBoolean");
+//        ArrayList<Place> placeArray = new ArrayList<Place>();
+//
+//       placeArray= savedInstanceState.getParcelableArrayList("placeArray");
+//       placeList=placeArray;
+//       Log.v("inside ","onrestore"+placeList.size());
+//
+//    }
 }
 
