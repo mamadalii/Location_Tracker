@@ -202,7 +202,6 @@ public class PolyActivity extends AppCompatActivity
         resultHandler = new Handler();
         tvClosePlace = findViewById(R.id.tv_closest_place);
         tvUserPlace = findViewById(R.id.tv_current_place);
-        tvResult = findViewById(R.id.result_text_view);
     }
 
     private void setStartButtonReset() {
