@@ -214,13 +214,24 @@ public class PolyActivity extends AppCompatActivity
                 currentPolygonOptions = null;
                 if (latLongCurrentArray != null)
                     latLongCurrentArray.clear();
+                handler.removeCallbacks(TimerRunnable);
+                start.setEnabled(true);
                 placeList.clear();
                 mMap.clear();
+
             }
         });
     }
 
     private void setStartButtonPause() {
+        pause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkHandler.removeCallbacks(checkRunnable);
+                handler.removeCallbacks(TimerRunnable);
+                start.setEnabled(true);
+            }
+        });
 
     }
 
@@ -244,7 +255,7 @@ public class PolyActivity extends AppCompatActivity
         clean = findViewById(R.id.btnClean);
         reset = findViewById(R.id.btnReset);
         pause = findViewById(R.id.btnPause);
-
+        pause.setEnabled(false);
     }
 
     private void setStartButtonClick() {
@@ -256,6 +267,7 @@ public class PolyActivity extends AppCompatActivity
                 StartTime = SystemClock.elapsedRealtime();
                 handler.postDelayed(checkRunnable, 1000);
                 start.setEnabled(false);
+                pause.setEnabled(true);
             }
         });
     }
