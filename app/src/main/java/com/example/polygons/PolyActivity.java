@@ -61,7 +61,9 @@ public class PolyActivity extends AppCompatActivity
 
     ArrayList<Marker> markerList = new ArrayList<>();
     Button statistics;
-
+    Button clean;
+    Button reset;
+    Button pause;
     TextView textView;
     /**
      * Based on `distanceToLine` method from
@@ -183,6 +185,7 @@ public class PolyActivity extends AppCompatActivity
         milliArray = new ArrayList<>();
         namesArray = new ArrayList<>();
         handler = new Handler();
+        initialiaze();
         Log.v("place numbers : " + placeList.size(), "onCreate");
 
         //check if there is no previous polyoptions
@@ -190,12 +193,31 @@ public class PolyActivity extends AppCompatActivity
         //Start Button Click Listener
         setStatisticsButtonClick();
         setStartButtonClick();
+        setStartButtonClean();
         //Check for users location every second
         checkMyLocation();
         resultHandler = new Handler();
         tvClosePlace = findViewById(R.id.tv_closest_place);
         tvUserPlace = findViewById(R.id.tv_current_place);
         tvResult = findViewById(R.id.result_text_view);
+    }
+
+    private void setStartButtonClean() {
+        clean.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                lastMarker.remove();
+                currentPolygonOptions = null;
+                latLongCurrentArray.clear();
+                mMap.clear();
+                setupOldPolygons(mMap);
+            }
+        });
+
+    }
+
+    private void initialiaze() {
+        clean = findViewById(R.id.btnClean);
     }
 
     private void setStartButtonClick() {
