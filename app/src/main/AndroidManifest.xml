@@ -14,7 +14,7 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <!--              The API key for Google Maps-based APIs. -->
+        <!-- The API key for Google Maps-based APIs. -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAOZVWsq1wK6Uxc8nMVFBBN5QFQnwAtyaE" />
@@ -36,7 +36,9 @@
         <activity
             android:name=".Stastistics"
             android:label="@string/title_activity_stastistics"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+
+
     </application>
 
 </manifest>

@@ -194,6 +194,9 @@ public class PolyActivity extends AppCompatActivity
         setStatisticsButtonClick();
         setStartButtonClick();
         setStartButtonClean();
+        setStartButtonReset();
+        setStartButtonPause();
+
         //Check for users location every second
         checkMyLocation();
         resultHandler = new Handler();
@@ -202,13 +205,34 @@ public class PolyActivity extends AppCompatActivity
         tvResult = findViewById(R.id.result_text_view);
     }
 
+    private void setStartButtonReset() {
+        reset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (lastMarker != null)
+                    lastMarker.remove();
+                currentPolygonOptions = null;
+                if (latLongCurrentArray != null)
+                    latLongCurrentArray.clear();
+                placeList.clear();
+                mMap.clear();
+            }
+        });
+    }
+
+    private void setStartButtonPause() {
+
+    }
+
     private void setStartButtonClean() {
         clean.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                lastMarker.remove();
+                if (lastMarker != null)
+                    lastMarker.remove();
                 currentPolygonOptions = null;
-                latLongCurrentArray.clear();
+                if (latLongCurrentArray != null)
+                    latLongCurrentArray.clear();
                 mMap.clear();
                 setupOldPolygons(mMap);
             }
@@ -218,6 +242,9 @@ public class PolyActivity extends AppCompatActivity
 
     private void initialiaze() {
         clean = findViewById(R.id.btnClean);
+        reset = findViewById(R.id.btnReset);
+        pause = findViewById(R.id.btnPause);
+
     }
 
     private void setStartButtonClick() {
