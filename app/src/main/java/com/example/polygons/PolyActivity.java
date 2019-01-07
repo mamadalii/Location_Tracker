@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -60,8 +61,8 @@ public class PolyActivity extends AppCompatActivity
 
 
     ArrayList<Marker> markerList = new ArrayList<>();
-    Button statistics;
-    Button clean;
+    FloatingActionButton statistics;
+    FloatingActionButton clean;
     Button reset;
     Button pause;
     TextView textView;
@@ -141,6 +142,7 @@ public class PolyActivity extends AppCompatActivity
     boolean changePlaceBoolean = false;
     TextView tvUserPlace;
     TextView tvClosePlace;
+    FloatingActionButton fbtnNewPlace;
 
     private static PolygonOptions currentPolygonOptions;
     private static List<PolygonOptions> polygonOptions;
@@ -192,16 +194,30 @@ public class PolyActivity extends AppCompatActivity
         polygonOptionsNullTester();
         //Start Button Click Listener
         setStatisticsButtonClick();
-        setStartButtonClick();
+//        setStartButtonStart();
         setStartButtonClean();
         setStartButtonReset();
-        setStartButtonPause();
-
+//        setStartButtonPause();
+        setStartFButtonNewPlace();
         //Check for users location every second
         checkMyLocation();
         resultHandler = new Handler();
         tvClosePlace = findViewById(R.id.tv_closest_place);
         tvUserPlace = findViewById(R.id.tv_current_place);
+    }
+
+    private void setStartFButtonNewPlace() {
+        fbtnNewPlace.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                removerAllMarkers();
+
+//        mMap.addPolygon(currentPolygonOptions);
+
+                if (latLongCurrentArray.size() > 2)
+                    polygonMaker(currentPolygonOptions);
+            }
+        });
     }
 
     private void setStartButtonReset() {
@@ -222,15 +238,10 @@ public class PolyActivity extends AppCompatActivity
         });
     }
 
-    private void setStartButtonPause() {
-        pause.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+    public void setStartButtonPause() {
                 checkHandler.removeCallbacks(checkRunnable);
                 handler.removeCallbacks(TimerRunnable);
                 start.setEnabled(true);
-            }
-        });
 
     }
 
@@ -251,24 +262,21 @@ public class PolyActivity extends AppCompatActivity
     }
 
     private void initialiaze() {
-        clean = findViewById(R.id.btnClean);
+        clean = findViewById(R.id.fbtnClean);
         reset = findViewById(R.id.btnReset);
         pause = findViewById(R.id.btnPause);
+        start = findViewById(R.id.btnStart);
+        fbtnNewPlace = findViewById(R.id.fbtnNewPlace);
         pause.setEnabled(false);
     }
 
-    private void setStartButtonClick() {
+    public void setStartButtonStart() {
 
-        start = findViewById(R.id.start);
-        start.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
                 StartTime = SystemClock.elapsedRealtime();
                 handler.postDelayed(checkRunnable, 1000);
-                start.setEnabled(false);
-                pause.setEnabled(true);
-            }
-        });
+//                start.setEnabled(false);
+//                pause.setEnabled(true);
+
     }
 
     private void setupNewPolygon(String title) {
@@ -412,7 +420,7 @@ public class PolyActivity extends AppCompatActivity
         return result;
     }
     private void setStatisticsButtonClick() {
-        statistics = findViewById(R.id.btnstatistics);
+        statistics = findViewById(R.id.fbtnStatistics);
         statistics.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -436,18 +444,14 @@ public class PolyActivity extends AppCompatActivity
 
     }
 
-    public void buttonFunction(View view) {
-        Log.v("polyoptions length ", "" + polygonOptions.size());
 
-        removerAllMarkers();
-
-//        mMap.addPolygon(currentPolygonOptions);
-
-        if (latLongCurrentArray.size() > 2)
-            polygonMaker(currentPolygonOptions);
-
-
-    }
+//    public void buttonFunction(View view) {
+//        Log.v("polyoptions length ", "" + polygonOptions.size());
+//
+//
+//
+//
+//    }
 
 //    private void builMap(GoogleMap gooogleMap) {
 //    }

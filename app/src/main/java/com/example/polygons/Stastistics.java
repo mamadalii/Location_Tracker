@@ -22,16 +22,23 @@ import static android.view.View.*;
 
 public class Stastistics extends AppCompatActivity {
 Button b;
+    FloatingActionButton fbtnMap;
     ListView lvStatistics;
     List<String> ListElementsArrayList;
     ArrayAdapter<String> adapter;
     String[] ListElements = new String[]{};
     ArrayList<Long> milliArray;
     ArrayList<String> nameArray;
+    PolyActivity polyActivity;
+    FloatingActionButton fbtnStart;
+    FloatingActionButton fbtnPause;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stastistics);
+
+        initializing();
+
 
         milliArray = new ArrayList<>();
         nameArray = new ArrayList<>();
@@ -72,8 +79,8 @@ Button b;
 //            }
 //        });
 
-b=findViewById(R.id.return_to);
-        b.setOnClickListener(new OnClickListener() {
+
+        fbtnMap.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -82,6 +89,12 @@ b=findViewById(R.id.return_to);
                 startActivity(intent);
             }
         });
+
+    }
+
+
+    private void initializing() {
+        fbtnMap = findViewById(R.id.fbtnMap);
 
     }
 
