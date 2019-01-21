@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#e20817</color>
+    <color name="colorPrimaryDark">#263238</color>
+    <color name="colorAccent">#EC407A</color>
+    <color name="colorButton">#4A148C</color>
+    <color name="primaryPressed">#5a4fa1</color>
+    <color name="primaryFocused">#c7111d</color>
+    <color name="Header_on_map_color">#ed4a148c</color>
 </resources>

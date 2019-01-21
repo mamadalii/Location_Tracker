@@ -17,7 +17,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 
-import static com.example.polygons.R.id.map;
 
 public class Timer extends AppCompatActivity {
 
@@ -42,7 +41,7 @@ public class Timer extends AppCompatActivity {
 //    @Override
 //    protected void onCreate(Bundle savedInstanceState) {
 //        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_maps);
+//        setContentView(R.layout.old_activity_maps);
 //
 //        textView = findViewById(R.id.textView);
 //        start = findViewById(R.id.start);

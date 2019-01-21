@@ -8,16 +8,16 @@ import com.google.android.gms.maps.model.LatLng;
 import java.util.ArrayList;
 
 public class polygon implements Parcelable {
-//Fields
+    //Fields
     //points of an Polygon;
-   private ArrayList<LatLng> points= new ArrayList<>();
-private int milliTime;
-private String tag;
+    private ArrayList<LatLng> points = new ArrayList<>();
+    private int milliTime;
+    private String tag;
 
     public polygon(ArrayList<LatLng> points, String tag) {
         this.points = points;
         this.tag = tag;
-        this.milliTime=0;
+        this.milliTime = 0;
     }
 
     protected polygon(Parcel in) {

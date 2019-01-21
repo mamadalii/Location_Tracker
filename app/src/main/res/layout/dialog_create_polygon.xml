@@ -1,47 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
-    android:padding="60dp">
 
-    <TextView
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="80dp"
+    app:cardCornerRadius="1dp"
+    app:cardElevation="20dp"
+   >
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/dialog_layout_text"
-        android:gravity="center_horizontal"
-        android:layout_marginTop="40dp"/>
 
-    <EditText
-        android:id="@+id/etPolygonTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="86dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="@string/polygon_title_et_hint"/>
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/btnDialogBuild"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="151dp"
-        android:layout_marginLeft="151dp"
-        android:layout_marginTop="205dp"
-        android:text="Build" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@drawable/lay_toolbar">
 
-    <Button
-        android:id="@+id/btnDialogCancel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="268dp"
-        android:layout_marginEnd="101dp"
-        android:layout_marginRight="101dp"
-        android:text="Return To Main Page" />
-</RelativeLayout>
+            <TextView
+                android:id="@+id/text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/dialog_layout_text"
+                android:textStyle="bold"
+                android:textColor="#fff" />
+        </LinearLayout>
+
+
+        <EditText
+            android:id="@+id/etPolygonTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:layout_marginTop="60dp"
+            android:layout_marginBottom="10dp"
+            android:ems="7"
+            android:hint="Choose a name"
+            android:inputType="textPersonName" />
+
+        <Button
+            android:id="@+id/btnDialogBuild"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="6dp"
+            android:padding="10dp"
+android:theme="@style/button_style"
+            android:text=" New Place "
+            android:textColor="#fff" />
+
+        <Button
+            android:id="@+id/btnDialogCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="20dp"
+            android:theme="@style/button_style"
+            android:text="  Main Page  "
+            android:textColor="#fff" />
+    </LinearLayout>
+</android.support.v7.widget.CardView>

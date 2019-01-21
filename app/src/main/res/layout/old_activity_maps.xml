@@ -1,0 +1,203 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+
+    <!--<fragment-->
+        <!--android:layout_weight="1"-->
+        <!--xmlns:tools="http://schemas.android.com/tools"-->
+        <!--xmlns:map="http://schemas.android.com/apk/res-auto"-->
+        <!--android:id="@+id/map"-->
+        <!--android:name="com.google.android.gms.maps.SupportMapFragment"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--tools:context="com.example.polygons.PolyActivity"-->
+        <!--map:uiZoomControls="true" />-->
+
+    <!--<RelativeLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent">-->
+
+        <!--<android.support.design.widget.FloatingActionButton-->
+            <!--android:id="@+id/fbtnNewPlace"-->
+            <!--android:layout_width="wrap_content"-->
+
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_gravity="bottom|end"-->
+            <!--android:layout_marginTop="20dp"-->
+            <!--android:layout_marginRight="10dp"-->
+            <!--android:elevation="6dp"-->
+            <!--android:src="@android:drawable/ic_menu_add"-->
+            <!--app:fabSize="auto" />-->
+
+
+        <!--<android.support.design.widget.FloatingActionButton-->
+            <!--android:id="@+id/fbtnClean"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_below="@id/fbtnNewPlace"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_gravity="bottom|end"-->
+            <!--android:layout_marginTop="10dp"-->
+            <!--android:layout_marginRight="10dp"-->
+            <!--android:elevation="10dp"-->
+            <!--android:src="@android:drawable/ic_menu_revert"-->
+            <!--app:fabSize="auto" />-->
+
+        <!--&gt;-->
+
+        <!--<LinearLayout-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="vertical">-->
+<!--<LinearLayout-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginTop="10dp"-->
+    <!--android:orientation="horizontal">-->
+
+
+    <!--<Button-->
+        <!--android:id="@+id/btnPause"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginLeft="10dp"-->
+        <!--android:background="@drawable/btn_rounded"-->
+        <!--android:text="Pause" />-->
+
+
+<!--</LinearLayout>-->
+
+            <!--<LinearLayout-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_margin="10dp"-->
+                <!--android:orientation="horizontal">-->
+
+                <!--<Button-->
+
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginLeft="0dp"-->
+                    <!--android:background="@drawable/btn_rounded"-->
+                    <!--android:onClick="buttonFunction"-->
+                    <!--android:text="New Place" />-->
+
+
+                <!--<Button-->
+                    <!--android:id="@+id/btnReset"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginLeft="10dp"-->
+                    <!--android:background="@drawable/btn_rounded"-->
+                    <!--android:text="Reset" />-->
+
+
+            <!--</LinearLayout>-->
+        <!--</LinearLayout>-->
+
+
+        <!--<android.support.design.widget.FloatingActionButton-->
+            <!--android:id="@+id/fbtnStatistics"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--android:layout_marginLeft="10dp"-->
+            <!--android:layout_marginBottom="10dp"-->
+            <!--android:layout_toRightOf="@id/btnStart"-->
+            <!--android:elevation="6dp"-->
+            <!--android:src="@android:drawable/ic_menu_info_details"-->
+            <!--app:fabSize="auto" />-->
+
+        <!--<Button-->
+            <!--android:id="@+id/btnStart"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--android:layout_centerHorizontal="true"-->
+            <!--android:layout_marginBottom="10dp"-->
+            <!--android:background="@drawable/circlebutton"-->
+            <!--android:text="Start"-->
+            <!--android:textColor="#FFFFFF" />-->
+
+        <!--<ImageView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:labelFor="@id/fbtnStatistics"-->
+            <!--android:src="@drawable/user" />-->
+
+        <!--<android.support.design.widget.FloatingActionButton-->
+            <!--android:id="@+id/fbtnPause"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--android:layout_marginRight="10dp"-->
+            <!--android:layout_marginBottom="10dp"-->
+            <!--android:layout_toLeftOf="@id/btnStart"-->
+            <!--android:elevation="6dp"-->
+
+            <!--app:fabSize="auto"-->
+
+            <!--/>-->
+
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentBottom="false"-->
+            <!--android:orientation="vertical">-->
+
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginBottom="10dp"-->
+                <!--android:orientation="horizontal">-->
+
+                <!--<TextView-->
+                    <!--android:id="@+id/tv_closest_place"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginLeft="20dp"-->
+                    <!--android:text="Closest Place"-->
+                    <!--android:textSize="20sp" />-->
+
+                <!--<TextView-->
+                    <!--android:id="@+id/tv_current_place"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginLeft="20dp"-->
+                    <!--android:text="Current Place"-->
+                    <!--android:textSize="20dp" />-->
+            <!--</LinearLayout>-->
+
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_alignParentBottom="true"-->
+                <!--android:layout_marginBottom="10dp"-->
+                <!--android:gravity="center"-->
+                <!--android:orientation="horizontal">-->
+
+                <!--<TextView-->
+                    <!--android:id="@+id/tv_timer"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginLeft="16dp"-->
+                    <!--android:text="00:00:00"-->
+                    <!--android:textColor="#009688"-->
+                    <!--android:textSize="24dp"-->
+                    <!--android:textStyle="bold"-->
+
+                    <!--/>-->
+
+
+            <!--</LinearLayout>-->
+
+        <!--</LinearLayout>-->
+
+    <!--</RelativeLayout>-->
+
+
+</RelativeLayout>

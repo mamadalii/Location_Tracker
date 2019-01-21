@@ -110,7 +110,7 @@
 //            buttonCount = 0;
 //        }
 //        // Retrieve the content view that renders the map.
-//        setContentView(R.layout.activity_maps);
+//        setContentView(R.layout.old_activity_maps);
 //
 //        // Get the SupportMapFragment and request notification when the map is ready to be used.
 //        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -137,7 +137,7 @@
 //            @Override
 //            public void onClick(View view) {
 //                //change the activity to statistics activity
-//                Intent intent = new Intent(PolyActivity.this, Stastistics.class);
+//                Intent intent = new Intent(PolyActivity.this, Result.class);
 //                startActivity(intent);
 //            }
 //        });

@@ -2,6 +2,9 @@
     <string name="app_name">Polygons</string>
     <string name="title_activity_maps">Polygons</string>
     <string name="title_activity_stastistics">Stastistics</string>
-    <string name="polygon_title_et_hint">Wri</string>
-    <string name="dialog_layout_text">You Are Building a New Area</string>
+    <string name="polygon_title_et_hint">Choose a Name</string>
+    <string name="dialog_layout_text">You Are Building a New Place</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
