@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.maps.android.PolyUtil;
 
@@ -49,6 +50,16 @@ public class Place implements Parcelable {
     //Methods
     GoogleMap googleMapReserve;
 
+    private Polygon polygon;
+
+    public Polygon getPolygon() {
+        return polygon;
+    }
+
+    public void setPolygon(Polygon polygon) {
+        this.polygon = polygon;
+    }
+
     protected Place(Parcel in) {
         milliSeconds = in.readLong();
         startTime = in.readLong();
@@ -74,8 +85,13 @@ public class Place implements Parcelable {
             this.googleMap = googleMapReserve;
 
         placePointsLatLng = latLongCurrentArray;
+//        googleMap.addPolygon(polygonOptions.clickable(true).fillColor(Color.parseColor("#112299"))).setTag(name);
 
-        googleMap.addPolygon(polygonOptions.clickable(true).fillColor(Color.parseColor("#112299"))).setTag(name);
+//        PolygonOptions options = new PolygonOptions();
+        polygonOptions.clickable(true);
+        polygonOptions.fillColor(Color.parseColor("#112299"));
+        this.polygon = googleMap.addPolygon(polygonOptions);
+        this.polygon.setTag(name);
     }
 
     public float distanceBetweenToPoint(Location loc1, Location loc2) {

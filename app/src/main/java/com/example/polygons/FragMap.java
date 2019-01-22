@@ -243,8 +243,8 @@ public class FragMap extends Fragment implements OnMapReadyCallback, View.OnClic
         swipeButton.setOnChangeListener(new SwipeButtonListener() {
             @Override
             public void onActiveChanged() {
-                if (active == false) {
-                    active = true;
+                if (!active) {
+//                    active = false;
                     checkMyLocation();
                 } else {
                     active = false;
@@ -274,6 +274,7 @@ public class FragMap extends Fragment implements OnMapReadyCallback, View.OnClic
         if (latLongCurrentArray != null)
             latLongCurrentArray.clear();
         handler.removeCallbacks(TimerRunnable);
+        active = true;
         placeList.clear();
         mMap.clear();
     }
@@ -384,6 +385,8 @@ public class FragMap extends Fragment implements OnMapReadyCallback, View.OnClic
         if (currentPolygonOptions != null) {
             mMap.addPolygon(currentPolygonOptions);
         }
+
+
         if (lastMarker != null) {
             googleMap.addMarker(new MarkerOptions()
                     .position(lastMarker.getPosition())
@@ -404,6 +407,14 @@ public class FragMap extends Fragment implements OnMapReadyCallback, View.OnClic
             e.printStackTrace();
         }
 
+        LocationManager service = (LocationManager)
+                getContext().getSystemService(LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+        String provider = service.getBestProvider(criteria, false);
+        userLocation = service.getLastKnownLocation(provider);
+//        LatLng userLocation = new LatLng(location.getLatitude(), location.getLongitude());
+//        userLocation = mMap.getMyLocation();
+
         mMap.setMyLocationEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
 //        new Handler().postDelayed(new Runnable() {
@@ -422,42 +433,53 @@ public class FragMap extends Fragment implements OnMapReadyCallback, View.OnClic
 //        }, 2000);
 
         locationManager = (LocationManager) getContext().getSystemService(LOCATION_SERVICE);
-//        locationListener = new LocationListener() {
-//            Marker m;
+        locationListener = new LocationListener() {
+            Marker m;
 
 
-//            @Override
-//            public void onLocationChanged(Location location) {
-//                if (m != null)
-//                    m.remove();
-////                m = googleMap.addMarker(new MarkerOptions()
-////                        .position(new LatLng(location.getLatitude(), location.getLongitude())).title("You Are Here")
-////                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE)));
-////                .icon(BitmapDescriptorFactory.fromResource(R.drawable.icon)
-//
-//                userLocation = location;
-//                if (firstBoot) {
-//                    mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(), location.getLongitude())));
-//                    mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
-//
-//                    firstBoot = false;
-//                }
-//            }
-//
-//            @Override
-//            public void onStatusChanged(String provider, int status, Bundle extras) {
-//            }
-//
-//            @Override
-//            public void onProviderEnabled(String provider) {
-//            }
-//
-//            @Override
-//            public void onProviderDisabled(String provider) {
-//            }
-//
-//        };
+            @Override
+            public void onLocationChanged(Location location) {
+                if (m != null)
+                    m.remove();
+//                m = googleMap.addMarker(new MarkerOptions()
+//                        .position(new LatLng(location.getLatitude(), location.getLongitude())).title("You Are Here")
+//                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE)));
+//                .icon(BitmapDescriptorFactory.fromResource(R.drawable.icon)
 
+                userLocation = location;
+                if (firstBoot) {
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(), location.getLongitude())));
+                    mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+
+                    firstBoot = false;
+                }
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+            }
+
+        };
+        if (Build.VERSION.SDK_INT < 23) {
+            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+            locationManager.requestLocationUpdates(locationManager.GPS_PROVIDER, 0, 0, locationListener);
+        } else {
+            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            } else {
+                locationManager.requestLocationUpdates(locationManager.GPS_PROVIDER, 0, 0, locationListener);
+            }
+        }
 
         googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
 
@@ -504,8 +526,36 @@ public class FragMap extends Fragment implements OnMapReadyCallback, View.OnClic
         mMap.setOnPolygonClickListener(new GoogleMap.OnPolygonClickListener() {
             @Override
             public void onPolygonClick(Polygon polygon) {
-                Toast.makeText(getContext(), "Here is : " + polygon.getTag().toString(),
-                        Toast.LENGTH_SHORT).show();
+                for (Place place : placeList) {
+                    String s = place.getPolygon().getId();
+                    String ss = polygon.getId();
+                    if (place.getPolygon().getId().equals(polygon.getId())) {
+
+//                        Place place = getUserPlace(userLocation);
+                        MillisecondTime = SystemClock.elapsedRealtime() - place.getStartTime();
+
+                        place.setmilliSeconds(place.getmilliSeconds() + MillisecondTime);
+                        UpdateTime = place.getmilliSeconds();
+                        place.setStartTime(SystemClock.elapsedRealtime());
+
+                        Seconds = (int) (UpdateTime / 1000);
+
+                        Minutes = Seconds / 60;
+
+                        hours = Minutes / 60;
+                        Minutes = Minutes % 60;
+                        Seconds = Seconds % 60;
+
+                        Log.v("seconds" + Seconds, "1234");
+                        String time = "" + String.format("%02d", hours) + ":" + String.format("%02d", Minutes) + ":"
+                                + String.format("%02d", Seconds);
+
+
+                        Toast.makeText(getContext(), "Here is : " + place.getName() + "\n" + "Time : " + time,
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }
+
             }
         });
 
@@ -551,10 +601,11 @@ public class FragMap extends Fragment implements OnMapReadyCallback, View.OnClic
 //            for (int i=0;i<polygonOptions.size();i++) {
         if (placeList != null) {
             if (placeList.size() != 0) {
-                for (Place p : placeList) {
-                    Place oldPlace = new Place(p.getPolygonOptions(), p.getName(), mMap, p.getplacePointsLatLng());
-//                mMap.addPolygon(options.fillColor(Color.GREEN)).setTag(title);
-
+                for (int i = 0; i < placeList.size(); i++) {
+                    Place place = placeList.get(i);
+                    Polygon polygon = mMap.addPolygon(place.getPolygonOptions());
+                    polygon.setTag(placeList.get(i).getPolygon().getTag());
+                    placeList.get(i).setPolygon(polygon);
                 }
             }
         }
@@ -673,7 +724,6 @@ public class FragMap extends Fragment implements OnMapReadyCallback, View.OnClic
     }
 
 
-
     //runnable that runs timer
     public Runnable TimerRunnable = new Runnable() {
 
@@ -717,7 +767,8 @@ public class FragMap extends Fragment implements OnMapReadyCallback, View.OnClic
 
         public void run() {
 
-            if (active == false) {
+            if (!active) {
+
                 if (placeList.size() > 0) {
 
 //                    Place place = isUserIn(userLocation);
