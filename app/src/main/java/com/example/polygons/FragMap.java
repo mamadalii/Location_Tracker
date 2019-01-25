@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -633,7 +634,10 @@ public class FragMap extends Fragment implements OnMapReadyCallback, View.OnClic
             Log.v(distancesToPolygons.toString() + "", "bale");
 
             Place closestPlace = placeList.get(distancesToPolygons.indexOf(Collections.min(distancesToPolygons)));
-
+            for (Place place : placeList) {
+                place.getPolygon().setFillColor(Color.BLUE);
+            }
+            closestPlace.getPolygon().setFillColor(Color.YELLOW);
             tvClosePlace.setText("Close to :" + closestPlace.getName());
 
 
@@ -759,6 +763,11 @@ public class FragMap extends Fragment implements OnMapReadyCallback, View.OnClic
 
 
                 handler.postDelayed(this, 1000);
+            } else {
+                if (placeList != null && placeList.size() != 0)
+                    for (Place place : placeList) {
+                        place.getPolygon().setFillColor(Color.BLUE);
+                    }
             }
         }
     };
