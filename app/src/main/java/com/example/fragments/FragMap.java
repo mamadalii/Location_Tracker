@@ -30,6 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.activities.ActivityShow;
+import com.example.events.EventOnSelectToolbarOptions;
 import com.example.models.Place;
 import com.example.polygons.R;
 import com.example.utility.SwipeButton;
@@ -46,6 +47,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.maps.android.PolyUtil;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -124,6 +129,19 @@ public class FragMap extends Fragment implements OnMapReadyCallback, View.OnClic
         super.onCreateOptionsMenu(menu, inflater);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
 
     private void initView() {
 //?
@@ -278,8 +296,7 @@ public class FragMap extends Fragment implements OnMapReadyCallback, View.OnClic
         placeList.clear();
         mMap.clear();
     }
-
-
+    
     private void setStartFButtonNewPlace() {
         try {
             removerAllMarkers();
@@ -856,6 +873,13 @@ public class FragMap extends Fragment implements OnMapReadyCallback, View.OnClic
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
     }
+
+
+    @Subscribe( threadMode = ThreadMode.MAIN)
+    public void onSuccessEvent(EventOnSelectToolbarOptions event){
+        setStartButtonReset();
+    }
+
 //    public void disableAllSettings(ViewGroup mGroup) {
 //
 //        int itotal = mGroup.getChildCount();

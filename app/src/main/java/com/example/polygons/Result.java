@@ -16,7 +16,7 @@ import java.util.List;
 import static android.view.View.*;
 
 public class Result extends AppCompatActivity {
-Button b;
+    Button b;
     FloatingActionButton fbtnMap;
     ListView lvStatistics;
     List<String> ListElementsArrayList;
@@ -26,6 +26,7 @@ Button b;
     ArrayList<String> nameArray;
     FloatingActionButton fbtnStart;
     FloatingActionButton fbtnPause;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

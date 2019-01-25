@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.example.events.EventOnSelectToolbarOptions;
 import com.example.fragments.FragMap;
 import com.example.fragments.FragResult;
 import com.example.polygons.R;
@@ -28,6 +29,8 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 
@@ -103,7 +106,8 @@ public class ActivityShow extends AppCompatActivity implements View.OnClickListe
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.one:
-                        Toast.makeText(ActivityShow.this, "One", Toast.LENGTH_SHORT).show();
+                        EventBus.getDefault().post(new EventOnSelectToolbarOptions(1));
+//                        Toast.makeText(ActivityShow.this, "One", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.two:
                         Toast.makeText(ActivityShow.this, "Two", Toast.LENGTH_SHORT).show();
