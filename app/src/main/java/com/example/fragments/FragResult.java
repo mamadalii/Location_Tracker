@@ -1,4 +1,4 @@
-package com.example.polygons;
+package com.example.fragments;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -10,11 +10,15 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.example.activities.ActivityShow;
+import com.example.models.Place;
+import com.example.polygons.R;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.example.polygons.FragMap.placeList;
+import static com.example.fragments.FragMap.placeList;
 
 
 public class FragResult extends Fragment {

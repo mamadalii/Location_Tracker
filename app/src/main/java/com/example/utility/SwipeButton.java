@@ -1,4 +1,4 @@
-package com.example.polygons;
+package com.example.utility;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -21,8 +21,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.example.polygons.R;
 
 public class SwipeButton extends RelativeLayout {
     private ImageView slidingButton;

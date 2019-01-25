@@ -1,4 +1,4 @@
-package com.example.polygons;
+package com.example.activities;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -18,6 +18,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.example.fragments.FragMap;
+import com.example.fragments.FragResult;
+import com.example.polygons.R;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.Status;

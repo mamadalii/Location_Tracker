@@ -1,4 +1,4 @@
-package com.example.polygons;
+package com.example.utility;
 
 import android.os.Bundle;
 import android.os.SystemClock;

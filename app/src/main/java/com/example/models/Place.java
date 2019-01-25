@@ -1,4 +1,4 @@
-package com.example.polygons;
+package com.example.models;
 
 import android.graphics.Color;
 import android.location.Location;
