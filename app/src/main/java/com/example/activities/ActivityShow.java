@@ -105,7 +105,7 @@ public class ActivityShow extends AppCompatActivity implements View.OnClickListe
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
-                    case R.id.one:
+                    case R.id.popRestart:
                         EventBus.getDefault().post(new EventOnSelectToolbarOptions(1));
 //                        Toast.makeText(ActivityShow.this, "One", Toast.LENGTH_SHORT).show();
                         break;

@@ -296,7 +296,7 @@ public class FragMap extends Fragment implements OnMapReadyCallback, View.OnClic
         placeList.clear();
         mMap.clear();
     }
-    
+
     private void setStartFButtonNewPlace() {
         try {
             removerAllMarkers();

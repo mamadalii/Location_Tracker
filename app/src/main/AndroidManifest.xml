@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.polygons">
-    package="com.google.android.gms.location.sample.basiclocationsample" >
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
@@ -41,7 +40,9 @@
         <!-- <activity android:name=".ActivityShow"></activity> -->
         <activity
             android:screenOrientation="portrait"
-            android:name="com.example.activities.ActivityShow"></activity>
+            android:name="com.example.activities.ActivityShow">
+
+        </activity>
     </application>
 
 </manifest>

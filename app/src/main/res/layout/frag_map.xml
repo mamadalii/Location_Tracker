@@ -163,6 +163,7 @@ android:textColor="#FFFF"
 
 
                 <Button
+                    android:visibility="gone"
                     android:id="@+id/btnReset"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
